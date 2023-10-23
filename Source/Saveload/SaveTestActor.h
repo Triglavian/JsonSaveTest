@@ -12,7 +12,7 @@ UCLASS()
 class SAVELOAD_API ASaveTestActor : public AActor, public ISavable
 {
 	GENERATED_BODY()
-	friend struct FUSSaveData;
+	friend struct FUSaveData;
 public:	
 	// Sets default values for this actor's properties
 	ASaveTestActor();
@@ -34,8 +34,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Save")
 	FString JsonSerialize();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Save")
-	void JsonDeserialize(const TSharedPtr<class FJsonObject>& JsonObject);
+	void JsonDeserialize();
 	void SetActorToSavableList_Implementation();
 	FString JsonSerialize_Implementation();
-	void JsonDeserialize_Implementation(const TSharedPtr<FJsonObject>& JsonObject);
+	void JsonDeserialize_Implementation();
 };

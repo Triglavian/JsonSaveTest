@@ -1,3 +1,4 @@
+#pragma once
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
@@ -15,7 +16,7 @@ class USavable : public UInterface
 };
 
 /**
- * 
+ *
  */
 class SAVELOAD_API ISavable
 {
@@ -28,5 +29,5 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Save")
 	FString JsonSerialize();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Save")
-	void JsonDeserialize(const TSharedPtr<class FJsonObject>& JsonObject);
+	void JsonDeserialize();
 };

@@ -3,7 +3,7 @@
 
 #include "MyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
-#include "SSaveData.h"
+#include "SaveData.h"
 
 void UMyGameInstance::SetActorToList(AActor* Actor)
 {
@@ -57,7 +57,6 @@ void UMyGameInstance::LoadJson()
 	}
 	UE_LOG(LogTemp, Log, TEXT("Loaded json string = %s"), *Save->JsonString);
 
-	TArray<TSharedPtr<FJsonObject>> JsonObjects;
 	TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(Save->JsonString);
 	TSharedPtr<FJsonObject> JObj = MakeShareable(new FJsonObject());
 
@@ -81,13 +80,44 @@ void UMyGameInstance::LoadJson()
 		}
 	}
 	UE_LOG(LogTemp, Log, TEXT("Deserialized, count = %d"), JsonObjects.Num());
-	for (int i = 0; i < 3; i++)
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	if (!Actors[i]->GetClass()->ImplementsInterface(USavable::StaticClass()))
+	//	{
+	//		UE_LOG(LogTemp, Log, TEXT("Wrong actor is try to add to savable list %s"), *Actors[i]->GetName());
+	//		return;
+	//	}
+	//	ISavable::Execute_JsonDeserialize(Actors[0]);
+	//}
+
+	UE_LOG(LogTemp, Log, TEXT("Actors count = %d"), Actors.Num());
+	for (auto& actor : Actors)
 	{
-		if (!Actors[i]->GetClass()->ImplementsInterface(USavable::StaticClass()))
+		if (false == actor->GetClass()->ImplementsInterface(USavable::StaticClass()))
 		{
-			UE_LOG(LogTemp, Log, TEXT("Wrong actor is try to add to savable list %s"), *Actors[i]->GetName());
-			return;
+			UE_LOG(LogTemp, Log, TEXT("Wrong actor is try to add to savable list %s"), *actor->GetActorLabel());
+			continue;
 		}
-		ISavable::Execute_JsonDeserialize(Actors[i]);
+		ISavable::Execute_JsonDeserialize(actor);
 	}
+}
+
+TSharedPtr<FJsonObject> UMyGameInstance::FindJsonByLabel(const FString& Label)
+{
+	FString actorName;
+	UE_LOG(LogTemp, Log, TEXT("JObj count = %d"), JsonObjects.Num());
+	for (auto& jObj : JsonObjects)
+	{
+		if (false == jObj->TryGetStringField(TEXT("ActorLabel"), actorName))
+		{
+			UE_LOG(LogTemp, Log, TEXT("Failed to get actor name from json object"));
+			return nullptr;
+		}
+		if (actorName == Label)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Found %s actor data"), *Label);
+			return jObj;
+		}
+	}
+	return nullptr;
 }

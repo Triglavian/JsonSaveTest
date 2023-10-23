@@ -3,7 +3,7 @@
 
 #include "SaveTestActor.h"
 #include "MyGameInstance.h"
-#include "SSaveData.h"
+#include "SaveData.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -35,8 +35,8 @@ void ASaveTestActor::SetActorToSavableList_Implementation()
 
 FString ASaveTestActor::JsonSerialize_Implementation()
 {
-	FUSSaveData save = FUSSaveData();
-	save.Init(this);
+	FUSaveData save = FUSaveData(this);
+	//save.Init(this);
 	//if (nullptr == save)
 	//{
 	//	UE_LOG(LogTemp, Log, TEXT("Failed to create save data"));
@@ -44,14 +44,22 @@ FString ASaveTestActor::JsonSerialize_Implementation()
 	//}
 	//save->Init(this);
 	FString str = save.JsonSerialize();
-	UE_LOG(LogTemp, Log, TEXT("Serialized str = %s\n\n"), *str);
+	//UE_LOG(LogTemp, Log, TEXT("Serialized str = %s\n\n"), *str);
 	return str;
 }
 
-void ASaveTestActor::JsonDeserialize_Implementation(const TSharedPtr<FJsonObject>& JsonObject)
+void ASaveTestActor::JsonDeserialize_Implementation()
 {
-	FUSSaveData save = FUSSaveData();
-	save.JsonDeserialize(JsonObject);
-	save.SetDeserializedData(this);
+	UMyGameInstance* inst = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(this));
+	UE_LOG(LogTemp, Log, TEXT("Try to find data : %s"), *GetActorLabel());
+	auto jsonData = inst->FindJsonByLabel(GetActorLabel());
+	if (nullptr == jsonData)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Failed to find data by actor name"));
+		return;
+	}
+	FUSaveData data = FUSaveData(this);
+	data.SetDeserializedData(jsonData, this);
+	UE_LOG(LogTemp, Log, TEXT("ActorLabel : %s, var: %d, Str: %s, Flag = %d"), *GetActorLabel(), var, *Str, flag == true ? 1 : 0);
 }
 
