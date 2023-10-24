@@ -25,10 +25,10 @@ public:
 	UPROPERTY()
 	FString Str;
 
-	//Object initializer instead of constructor
-	void Init(class ASaveTestActor* Actor);
+	////Object initializer instead of constructor
+	//void Init(class ASaveTestActor* Actor);
 	FUSaveData();
-	FUSaveData(ASaveTestActor* Actor);
+	FUSaveData(class ASaveTestActor* Actor);
 	//Serialize members to json string and return
 	FString JsonSerialize();
 	//Deserialize the object passed by argument and set the datas to actor

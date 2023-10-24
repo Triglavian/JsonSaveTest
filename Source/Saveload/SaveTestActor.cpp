@@ -36,15 +36,8 @@ void ASaveTestActor::SetActorToSavableList_Implementation()
 FString ASaveTestActor::JsonSerialize_Implementation()
 {
 	FUSaveData save = FUSaveData(this);
-	//save.Init(this);
-	//if (nullptr == save)
-	//{
-	//	UE_LOG(LogTemp, Log, TEXT("Failed to create save data"));
-	//	return TEXT("");
-	//}
-	//save->Init(this);
+
 	FString str = save.JsonSerialize();
-	//UE_LOG(LogTemp, Log, TEXT("Serialized str = %s\n\n"), *str);
 	return str;
 }
 

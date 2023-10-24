@@ -20,10 +20,7 @@ void ATriggerActor::BeginPlay()
 {
 	Super::BeginPlay();
 	UMyGameInstance* inst = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(this));
-	FTimerHandle handle;
-	FTimerHandle GravityTimerHandle;
-	float GravityTime = 3;
-}
+} 
 
 void ATriggerActor::SaveLoad()
 {
@@ -40,13 +37,24 @@ void ATriggerActor::SaveLoad()
 	}
 }
 
+void ATriggerActor::CountDown()
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("%d second to save/load"), counter--));
+	}	
+	if (counter < 0)
+	{
+		GetWorldTimerManager().ClearTimer(handle);
+		SaveLoad();
+	}
+}
+
 // Called every frame
 void ATriggerActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	static float time = 0.f;
-	time += DeltaTime;
-	if (time <= 3) return;
-	SaveLoad();
+	static bool flag = true;
+	if (flag) GetWorldTimerManager().SetTimer(handle, this, &ATriggerActor::CountDown, 1.0f, true);
 	SetActorTickEnabled(false);
 }

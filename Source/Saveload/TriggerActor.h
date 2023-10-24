@@ -20,7 +20,10 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadwrite)
 	class UBoxComponent* Box;
+	int counter = 5;
+	FTimerHandle handle;
 	void SaveLoad();
+	void CountDown();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -4,14 +4,14 @@
 #include "SaveTestActor.h"
 #include "JsonUtilities.h"
 
-void FUSaveData::Init(ASaveTestActor* Actor)
-{
-	this->ActorLabel = Actor->GetActorLabel();
-	this->Location = Actor->GetActorLocation();
-	this->var = Actor->var;
-	this->Flag = Actor->flag;
-	this->Str = Actor->Str;	
-}
+//void FUSaveData::Init(ASaveTestActor* Actor)
+//{
+//	this->ActorLabel = Actor->GetActorLabel();
+//	this->Location = Actor->GetActorLocation();
+//	this->var = Actor->var;
+//	this->Flag = Actor->flag;
+//	this->Str = Actor->Str;	
+//}
 
 FUSaveData::FUSaveData()
 {
